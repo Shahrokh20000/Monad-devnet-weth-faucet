@@ -316,8 +316,17 @@
                     web3.setProvider(new Web3.providers.HttpProvider(rpcUrl));
                     contract = new web3.eth.Contract(contractABI, contractAddress);
                     console.log("Minting tokens...");
-                    await contract.methods.mint().send({ from: accounts[0] });
-                    alert("5000 WETH minted successfully!");
+                    await contract.methods.mint().send({ from: accounts[0] })
+                        .on('transactionHash', function(hash){
+                            console.log("Transaction Hash:", hash);
+                        })
+                        .on('receipt', function(receipt){
+                            console.log("Receipt:", receipt);
+                            alert("5000 WETH minted successfully!");
+                        })
+                        .on('error', function(error, receipt) {
+                            console.error("Minting failed", error);
+                        });
                 } catch (error) {
                     console.error("Minting failed", error);
                 }
