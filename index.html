@@ -300,9 +300,10 @@
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     accounts = await web3.eth.getAccounts();
+                    console.log("Connected accounts:", accounts);
                     document.getElementById('mintTokens').disabled = false;
                 } catch (error) {
-                    console.error("User denied account access");
+                    console.error("User denied account access", error);
                 }
             } else {
                 alert("Please install MetaMask!");
@@ -314,6 +315,7 @@
                 try {
                     web3.setProvider(new Web3.providers.HttpProvider(rpcUrl));
                     contract = new web3.eth.Contract(contractABI, contractAddress);
+                    console.log("Minting tokens...");
                     await contract.methods.mint().send({ from: accounts[0] });
                     alert("5000 WETH minted successfully!");
                 } catch (error) {
@@ -321,6 +323,3 @@
                 }
             }
         };
-    </script>
-</body>
-</html>
